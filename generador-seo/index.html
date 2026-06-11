@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Generador de Blog SEO — Trada</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', sans-serif; background: #fafafa; color: #222; min-height: 100vh; }
+
+    header {
+      background: #111;
+      color: #fff;
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    header h1 { font-size: 1.2rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+    header span { color: #aaa; font-size: 0.85rem; }
+
+    .container { max-width: 860px; margin: 40px auto; padding: 0 20px; }
+
+    .card {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 28px;
+    }
+
+    h2 { font-size: 1rem; font-weight: 700; margin-bottom: 18px; text-transform: uppercase; letter-spacing: 1px; color: #111; }
+
+    label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: #444; }
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      margin-bottom: 18px;
+      outline: none;
+      transition: border 0.2s;
+    }
+    input:focus, select:focus, textarea:focus { border-color: #111; }
+    textarea { min-height: 80px; resize: vertical; }
+
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    button.primary {
+      background: #111;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 13px 28px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.2s;
+    }
+    button.primary:hover { background: #333; }
+
+    button.copy {
+      background: #fff;
+      color: #111;
+      border: 1.5px solid #111;
+      border-radius: 8px;
+      padding: 9px 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 16px;
+      transition: all 0.2s;
+    }
+    button.copy:hover { background: #111; color: #fff; }
+
+    #resultado { display: none; }
+
+    .output-box {
+      background: #f8f8f8;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 24px;
+      white-space: pre-wrap;
+      font-size: 0.92rem;
+      line-height: 1.75;
+      color: #222;
+    }
+
+    .meta-preview {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+    }
+    .meta-preview .meta-title { color: #1a0dab; font-size: 1.05rem; font-weight: 600; margin-bottom: 4px; }
+    .meta-preview .meta-url { color: #006621; font-size: 0.82rem; margin-bottom: 6px; }
+    .meta-preview .meta-desc { color: #545454; font-size: 0.88rem; line-height: 1.5; }
+    .meta-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #999; margin-bottom: 8px; }
+
+    .badge {
+      display: inline-block;
+      background: #111;
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-right: 6px;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .tip {
+      background: #fffbe6;
+      border-left: 3px solid #f0b800;
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.85rem;
+      color: #555;
+      margin-bottom: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>TRADA</h1>
+  <span>/ Generador de Blog SEO</span>
+</header>
+
+<div class="container">
+  <div class="card">
+    <h2>Nuevo Artículo</h2>
+
+    <div class="tip">
+      💡 Escribe el tema del artículo y llena los campos. En segundos tendrás el contenido listo para pegar en Shopify.
+    </div>
+
+    <label>Tema del artículo *</label>
+    <input type="text" id="tema" placeholder="Ej: Drop de Nike Air Max 2025, Outfits para boda en GDL, Tendencias primavera-verano" />
+
+    <div class="row">
+      <div>
+        <label>Tipo de artículo</label>
+        <select id="tipo">
+          <option value="tendencias">Tendencias de moda</option>
+          <option value="outfits">Guía de outfits</option>
+          <option value="drop">Drop / Lanzamiento de marca</option>
+          <option value="tips">Tips de estilo</option>
+          <option value="temporada">Moda por temporada</option>
+        </select>
+      </div>
+      <div>
+        <label>Tono</label>
+        <select id="tono">
+          <option value="aspiracional">Aspiracional / Lujo</option>
+          <option value="amigable">Amigable / Cercano</option>
+          <option value="experto">Experto / Editorial</option>
+        </select>
+      </div>
+    </div>
+
+    <label>Productos o marcas a mencionar (opcional)</label>
+    <input type="text" id="productos" placeholder="Ej: Nike, Zara, vestido floral de la nueva colección" />
+
+    <label>Palabras clave SEO (opcional)</label>
+    <input type="text" id="keywords" placeholder="Ej: ropa de moda Guadalajara, outfits 2025, tienda de ropa GDL" />
+
+    <button class="primary" onclick="generar()">✦ Generar artículo</button>
+  </div>
+
+  <div class="card" id="resultado">
+    <h2>Vista previa SEO en Google</h2>
+    <div class="meta-preview">
+      <div class="meta-label">Así aparecerá en Google</div>
+      <div class="meta-title" id="prev-title"></div>
+      <div class="meta-url" id="prev-url"></div>
+      <div class="meta-desc" id="prev-desc"></div>
+    </div>
+
+    <div style="margin-bottom:12px;">
+      <div class="meta-label" style="margin-bottom:8px;">Palabras clave incluidas</div>
+      <div id="prev-badges"></div>
+    </div>
+
+    <h2 style="margin-top:24px;">Artículo completo</h2>
+    <div class="output-box" id="output"></div>
+    <button class="copy" onclick="copiar()">📋 Copiar artículo</button>
+  </div>
+</div>
+
+<script>
+const plantillas = {
+  tendencias: {
+    intro: (tema, tono) => tonoIntro(tono, tema, [
+      `La moda en Guadalajara nunca para, y este año ${tema} está marcando la pauta entre las mujeres que saben lo que quieren.`,
+      `Si hay algo que define a la mujer de Guadalajara es su instinto para la moda — y ${tema} es exactamente lo que está dominando los feeds esta temporada.`,
+      `Mantenerse al día con ${tema} no es solo tendencia, es una declaración de identidad.`
+    ]),
+    secciones: (tema, productos) => [
+      {
+        titulo: `¿Por qué ${tema} es la tendencia del momento?`,
+        cuerpo: `Las piezas clave de esta tendencia combinan versatilidad con un toque de lujo que encaja perfectamente con el estilo de vida activo de la mujer moderna. Desde la reunión de trabajo hasta la salida a Plaza Andares, estas prendas hacen el trabajo por ti.\n\n${productos ? `Marcas como ${productos} lideran esta ola con colecciones que van directo al armario sin pasar por el pensamiento.` : 'Las mejores tiendas de Guadalajara ya tienen estas piezas en sus racks.'}`
+      },
+      {
+        titulo: 'Cómo llevar esta tendencia sin esfuerzo',
+        cuerpo: `La clave está en la combinación. Una pieza statement con básicos de calidad crea un look que se ve editado sin intentarlo. El truco que usan las mujeres más estilosas de GDL: invertir en una sola pieza que eleve todo el outfit.\n\nNo se trata de tener mucho — se trata de elegir bien.`
+      },
+      {
+        titulo: '¿Dónde conseguirlo en Guadalajara?',
+        cuerpo: `En Trada encontrarás exactamente las piezas que necesitas para sumarte a esta tendencia. Selección cuidadosa, calidad real y entrega rápida para que no pierdas el momento.\n\n👉 Explora la colección en nuestra tienda online o visítanos en persona.`
+      }
+    ]
+  },
+  outfits: {
+    intro: (tema, tono) => tonoIntro(tono, tema, [
+      `Armar el outfit perfecto para ${tema} no tiene que ser difícil — solo tienes que saber combinar.`,
+      `Cuando se trata de ${tema}, el outfit correcto puede hacer toda la diferencia entre pasar desapercibida o ser la que todos notan.`,
+      `${tema}: la guía de outfits que toda mujer de Guadalajara necesita.`
+    ]),
+    secciones: (tema, productos) => [
+      {
+        titulo: 'El look base: lo que nunca falla',
+        cuerpo: `Para ${tema} hay piezas que siempre funcionan. Un buen pantalón de corte limpio, una blusa con personalidad y zapatos que cuenten una historia. La diferencia entre un outfit bueno y uno increíble está en los detalles.\n\n${productos ? `Piezas de ${productos} son perfectas para construir este look.` : 'En Trada tenemos exactamente las piezas que necesitas.'}`
+      },
+      {
+        titulo: 'Opciones según la ocasión',
+        cuerpo: `**Durante el día:** Apuesta por telas ligeras y colores que funcionen bajo el sol de GDL. Cómodo pero impecable.\n\n**En la noche:** Sube el nivel con una pieza que capte la luz. No necesitas cambiarte toda — con un accesorio diferente y el outfit de día se convierte en noche.\n\n**En el gym o camino a él:** El athleisure bien hecho es fashion en sí mismo.`
+      },
+      {
+        titulo: 'El secreto de las que siempre se ven bien',
+        cuerpo: `Las mujeres más estilosas no tienen más ropa — tienen mejores piezas. Invierten en calidad sobre cantidad y saben exactamente qué combina con qué en su clóset.\n\nEn Trada hacemos esa selección por ti. Cada pieza está pensada para que puedas combinarla con lo que ya tienes.`
+      }
+    ]
+  },
+  drop: {
+    intro: (tema, tono) => tonoIntro(tono, tema, [
+      `${tema} ya llegó y las que sabían, ya lo tienen. Aquí todo lo que necesitas saber antes de que se agote.`,
+      `El drop que todos estaban esperando: ${tema}. Esto es lo que hace especial esta colección.`,
+      `Cuando sale algo bueno, no hay tiempo para pensarlo. ${tema} acaba de llegar y esto es lo que tienes que saber.`
+    ]),
+    secciones: (tema, productos) => [
+      {
+        titulo: `¿Qué hace especial este drop?`,
+        cuerpo: `${tema} no es solo ropa — es el tipo de pieza que define una temporada. El diseño, los materiales y la energía de esta colección hablan directamente a la mujer que sabe lo que quiere sin necesitar que se lo expliquen.\n\n${productos ? `${productos} no decepciona cuando se trata de crear momentos de moda que importan.` : 'Esta colección es exactamente eso: prendas que importan.'}`
+      },
+      {
+        titulo: 'Las piezas que no puedes perderte',
+        cuerpo: `Dentro del drop hay piezas estrella — esas que se agotan primero porque todo el mundo las quiere. Identifícalas, decide cuál es tuya y no lo pienses demasiado.\n\nLa moda impulsiva tiene su razón de ser: algunas oportunidades no regresan.`
+      },
+      {
+        titulo: '¿Cómo conseguirlo?',
+        cuerpo: `Disponible en nuestra tienda online con envío a todo Guadalajara y México. También puedes venir a verlo en persona — nada como tocar la tela antes de decidir.\n\n⚡ Stock limitado. Las que llegan primero, se llevan lo mejor.`
+      }
+    ]
+  },
+  tips: {
+    intro: (tema, tono) => tonoIntro(tono, tema, [
+      `Hay formas de vestir y formas de vestir bien. ${tema} es exactamente la diferencia entre las dos.`,
+      `${tema}: los consejos que las mujeres más estilosas de Guadalajara ya aplican sin pensarlo.`,
+      `Si quieres elevar tu estilo, ${tema} es el punto de partida.`
+    ]),
+    secciones: (tema, productos) => [
+      {
+        titulo: 'El principio que lo cambia todo',
+        cuerpo: `La mayoría de la gente cree que verse bien requiere mucho dinero o mucho tiempo. No es así. Se requiere criterio — y el criterio se puede aprender.\n\nEl primer paso de ${tema}: conocer tu silueta y comprar prendas que trabajen para ella, no en su contra.`
+      },
+      {
+        titulo: '5 reglas que siempre funcionan',
+        cuerpo: `1. Una pieza statement por outfit — no dos.\n2. Los colores neutros son tu base, los colores vivos son tu firma.\n3. La ropa bien ajustada siempre se ve más cara.\n4. Los accesorios correctos cambian un look completo.\n5. Calidad sobre cantidad, siempre.\n\n${productos ? `Marcas como ${productos} entienden estas reglas perfectamente.` : 'En Trada seleccionamos piezas con estas reglas en mente.'}`
+      },
+      {
+        titulo: 'Aplicarlo en tu día a día',
+        cuerpo: `No tienes que renovar todo tu clóset. Empieza con una pieza bien elegida y construye desde ahí. La mujer estilosa no nació así — desarrolló su ojo con el tiempo.\n\nNosotros hacemos la curaduría. Tú decides.`
+      }
+    ]
+  },
+  temporada: {
+    intro: (tema, tono) => tonoIntro(tono, tema, [
+      `${tema} llegó y con él una oportunidad perfecta para renovar el guardarropa con piezas que realmente valen la pena.`,
+      `Cada temporada trae sus propias reglas de moda — y ${tema} no es la excepción. Aquí lo que necesitas saber.`,
+      `El cambio de temporada es el mejor pretexto para invertir en moda inteligente. ${tema}: la guía completa.`
+    ]),
+    secciones: (tema, productos) => [
+      {
+        titulo: `Las tendencias clave de ${tema}`,
+        cuerpo: `Esta temporada trae colores, texturas y siluetas que se sienten frescos sin perder la elegancia. La paleta va desde los tonos tierra cálidos hasta los neutros fríos — perfecta para la dualidad del clima de Guadalajara.\n\n${productos ? `Marcas como ${productos} capturaron perfecto el espíritu de la temporada.` : 'En Trada ya tenemos la selección lista.'}`
+      },
+      {
+        titulo: 'Piezas esenciales para tu clóset',
+        cuerpo: `**La pieza de inversión:** Algo que uses 30 veces esta temporada. Vale la pena pagar un poco más.\n**La pieza de tendencia:** Lo que está en todos los feeds. Cómpralo mientras está en momento.\n**La pieza versátil:** La que va con todo y resuelve cualquier ocasión sin pensar.\n\nTres piezas bien elegidas son mejores que diez compras de impulso sin dirección.`
+      },
+      {
+        titulo: 'Dónde encontrar lo mejor de la temporada en GDL',
+        cuerpo: `Trada selecciona lo mejor de cada temporada para que no tengas que buscar en 20 tiendas. Una sola parada — física u online — con todo lo que necesitas.\n\nEntrega rápida en Guadalajara. Fácil, sin complicaciones.`
+      }
+    ]
+  }
+};
+
+function tonoIntro(tono, tema, opciones) {
+  if (tono === 'aspiracional') return opciones[0];
+  if (tono === 'amigable') return opciones[1];
+  return opciones[2];
+}
+
+function slugify(str) {
+  return str.toLowerCase()
+    .replace(/[áàä]/g, 'a').replace(/[éèë]/g, 'e')
+    .replace(/[íìï]/g, 'i').replace(/[óòö]/g, 'o')
+    .replace(/[úùü]/g, 'u').replace(/ñ/g, 'n')
+    .replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').slice(0, 60);
+}
+
+function generarKeywords(tema, tipo, kwExtra) {
+  const base = ['ropa de moda Guadalajara', 'tienda de ropa GDL', 'moda 2025', 'outfits GDL'];
+  const porTipo = {
+    tendencias: ['tendencias de moda', 'ropa de tendencia', 'estilo moderno'],
+    outfits: ['combinaciones de ropa', 'guía de outfits', 'cómo vestirse'],
+    drop: ['nueva colección', 'drop de moda', 'lanzamiento de ropa'],
+    tips: ['consejos de moda', 'tips de estilo', 'cómo vestir bien'],
+    temporada: ['moda de temporada', 'ropa nueva temporada', 'tendencias temporada']
+  };
+  const extra = kwExtra ? kwExtra.split(',').map(k => k.trim()).filter(Boolean) : [];
+  return [...new Set([...extra, ...porTipo[tipo], ...base])].slice(0, 7);
+}
+
+function generar() {
+  const tema = document.getElementById('tema').value.trim();
+  if (!tema) { alert('Escribe el tema del artículo'); return; }
+
+  const tipo = document.getElementById('tipo').value;
+  const tono = document.getElementById('tono').value;
+  const productos = document.getElementById('productos').value.trim();
+  const kwInput = document.getElementById('keywords').value;
+
+  const p = plantillas[tipo];
+  const intro = p.intro(tema, tono);
+  const secciones = p.secciones(tema, productos);
+  const keywords = generarKeywords(tema, tipo, kwInput);
+
+  const metaTitle = `${tema} — Trada | Tienda de Ropa en Guadalajara`.slice(0, 60);
+  const metaDesc = `${intro.slice(0, 145)}...`;
+  const slug = slugify(tema);
+
+  // Construir artículo
+  let articulo = `# ${tema}\n\n`;
+  articulo += `**Meta título:** ${metaTitle}\n`;
+  articulo += `**Meta descripción:** ${metaDesc}\n`;
+  articulo += `**URL sugerida:** /blogs/moda/${slug}\n\n`;
+  articulo += `---\n\n`;
+  articulo += `${intro}\n\n`;
+
+  secciones.forEach(s => {
+    articulo += `## ${s.titulo}\n\n${s.cuerpo}\n\n`;
+  });
+
+  articulo += `---\n\n`;
+  articulo += `*¿Lista para renovar tu look? Visita [trada.mx](https://trada.mx) o pásate a nuestra tienda en Guadalajara.*`;
+
+  // Mostrar vista previa SEO
+  document.getElementById('prev-title').textContent = metaTitle;
+  document.getElementById('prev-url').textContent = `trada.mx › blogs › moda › ${slug}`;
+  document.getElementById('prev-desc').textContent = metaDesc;
+
+  const badgesEl = document.getElementById('prev-badges');
+  badgesEl.innerHTML = keywords.map(k => `<span class="badge">${k}</span>`).join('');
+
+  document.getElementById('output').textContent = articulo;
+  document.getElementById('resultado').style.display = 'block';
+  document.getElementById('resultado').scrollIntoView({ behavior: 'smooth' });
+}
+
+function copiar() {
+  const texto = document.getElementById('output').textContent;
+  navigator.clipboard.writeText(texto).then(() => {
+    const btn = document.querySelector('button.copy');
+    btn.textContent = '✓ Copiado';
+    setTimeout(() => btn.textContent = '📋 Copiar artículo', 2000);
+  });
+}
+</script>
+</body>
+</html>
